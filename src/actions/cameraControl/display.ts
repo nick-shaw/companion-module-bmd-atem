@@ -27,6 +27,11 @@ export interface AtemCameraControlDisplayActions {
 		cameraId: string
 		state: TrueFalseToggle
 	}
+	[ActionId.CameraControlVideoDisplayLut]: {
+		cameraId: string
+		lutIndex: string
+		state: TrueFalseToggle
+	}
 }
 
 export function createCameraControlDisplayActions(
@@ -41,6 +46,7 @@ export function createCameraControlDisplayActions(
 			[ActionId.CameraControlDisplayFalseColor]: undefined,
 			[ActionId.CameraControlDisplayZebra]: undefined,
 			[ActionId.CameraControlOutputStatusOverlay]: undefined,
+			[ActionId.CameraControlVideoDisplayLut]: undefined,
 		}
 	}
 
@@ -194,6 +200,45 @@ export function createCameraControlDisplayActions(
 				}
 
 				await commandSender?.outputOverlayEnables(cameraId, target)
+			},
+		},
+		[ActionId.CameraControlVideoDisplayLut]: {
+			name: 'Camera Control: Display LUT',
+			options: {
+				cameraId: CameraControlSourcePicker(),
+				lutIndex: {
+					id: 'lutIndex',
+					type: 'dropdown',
+					label: 'LUT',
+					default: '0',
+					choices: [
+						{ id: '0', label: 'None' },
+						{ id: '1', label: 'Custom' },
+						{ id: '2', label: 'Video' },
+						{ id: '3', label: 'Extended Video' },
+					],
+				},
+				state: {
+					id: 'state',
+					type: 'dropdown',
+					label: 'State',
+					default: 'toggle',
+					choices: CHOICES_ON_OFF_TOGGLE,
+				},
+			},
+			callback: async ({ options }) => {
+				const cameraId = await options.getParsedNumber('cameraId')
+				const lutIndex = Number(options.getPlainString('lutIndex'))
+
+				let target: boolean
+				if (options.getPlainString('state') === 'toggle') {
+					const cameraState = state.atemCameraState.get(cameraId)
+					target = !cameraState?.video?.displayLut?.enabled
+				} else {
+					target = options.getPlainString('state') === 'true'
+				}
+
+				await commandSender?.videoDisplayLut(cameraId, lutIndex, target)
 			},
 		},
 	}

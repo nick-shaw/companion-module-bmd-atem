@@ -29,6 +29,8 @@ export function updateCameraControlVariables(
 	values[`camera_${state.cameraId}_false_color`] = state.display.exposureAndFocusTools.falseColor ? 1 : 0
 	values[`camera_${state.cameraId}_zebra`] = state.display.exposureAndFocusTools.zebra ? 1 : 0
 	values[`camera_${state.cameraId}_status_overlay`] = state.output.overlayEnables ? 1 : 0
+	values[`camera_${state.cameraId}_display_lut`] = state.video.displayLut.lutIndex
+	values[`camera_${state.cameraId}_display_lut_enabled`] = state.video.displayLut.enabled ? 1 : 0
 
 	const defineRGBY = (key: string, vals: ColorAdjust) => {
 		values[`camera_${state.cameraId}_color_${key}_red`] = roundToFactor(vals.red, 1000)
@@ -117,6 +119,14 @@ export function initCameraControlVariables(
 	variables.push({
 		variableId: `camera_${cameraId}_status_overlay`,
 		name: `Camera ${cameraId}: Status Overlay`,
+	})
+	variables.push({
+		variableId: `camera_${cameraId}_display_lut`,
+		name: `Camera ${cameraId}: Display LUT`,
+	})
+	variables.push({
+		variableId: `camera_${cameraId}_display_lut_enabled`,
+		name: `Camera ${cameraId}: Display LUT Enabled`,
 	})
 
 	const defineRGBY = (key: string, name: string) => {

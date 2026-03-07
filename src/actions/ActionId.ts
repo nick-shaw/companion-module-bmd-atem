@@ -133,6 +133,7 @@ export enum ActionId {
 	CameraControlDisplayFalseColor = 'cameraControlDisplayFalseColor',
 	CameraControlDisplayZebra = 'cameraControlDisplayZebra',
 	CameraControlOutputStatusOverlay = 'cameraControlOutputStatusOverlay',
+	CameraControlVideoDisplayLut = 'cameraControlVideoDisplayLut',
 
 	CameraControlMediaRecordSingle = 'cameraControlMediaRecordSingle',
 	CameraControlMediaRecordMultiple = 'cameraControlMediaRecordMultiple',
